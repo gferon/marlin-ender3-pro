@@ -1,0 +1,8 @@
+[submodule "Marlin"]
+	path = Marlin
+	url = https://github.com/MarlinFirmware/Marlin
+	branch = 2.0.x
+[submodule "Configurations"]
+	path = Configurations
+	url = https://github.com/MarlinFirmware/Configurations
+	branch = import-2.0.x
