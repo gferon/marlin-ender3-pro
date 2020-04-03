@@ -1,0 +1,2 @@
+#!/bin/bash -ex
+arduino-cli compile --fqbn MightyCore:avr:1284:pinout=sanguino,LTO=Os_flto Marlin --verbose
