@@ -1,9 +1,0 @@
-#!/bin/bash -ex
-arduino-cli core install arduino:avr MightyCore:avr@2.0.3
-arduino-cli lib install U8glib@1.18.0
-
-mkdir -p buildroot
-cp -r Marlin/* buildroot/
-cp -r config/* buildroot/Marlin/
-
-arduino-cli compile --fqbn MightyCore:avr:1284:pinout=sanguino,LTO=Os_flto --verbose buildroot/Marlin
