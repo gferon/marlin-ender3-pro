@@ -12,11 +12,13 @@ prepare: arduino-cli
 
 build: prepare
 	cp config/* Marlin/Marlin/
-	arduino-cli compile --output-dir target --fqbn MightyCore:avr:1284:pinout=sanguino,LTO=Os_flto Marlin/Marlin
-
-clean:
-	rm Marlin/Marlin/$(ls config/)
+	arduino-cli compile --verbose --output-dir target --fqbn MightyCore:avr:1284:pinout=sanguino,LTO=Os_flto Marlin/Marlin
 
 flash:
 	scp target/Marlin.ino.hex pi@octopi:.
-	ssh pi@octopi "avrdude -C /etc/avrdude.conf -v -p atmega1284p -carduino -P ${1:-/dev/ttyUSB0} -b115200 -D -Uflash:w:Marlin.MightyCore.avr.1284.hex:i"
+	ssh pi@octopi "avrdude -C /etc/avrdude.conf -v -p atmega1284p -carduino -P /dev/ttyUSB0 -b 115200 -D -Uflash:w:Marlin.ino.hex:i"
+
+clean:
+	rm -f Marlin/Marlin/{_Bootscreen.h,_Statusscreen.h}
+	rm -f target/*
+	git checkout Marlin/Marlin/{Configuration.h,Configuration_adv.h}
