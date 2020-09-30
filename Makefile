@@ -7,7 +7,8 @@ arduino-cli:
 	curl -sL https://github.com/arduino/arduino-cli/releases/download/0.11.0/arduino-cli_0.11.0_Linux_64bit.tar.gz | tar -xz arduino-cli
 
 prepare: arduino-cli
-	arduino-cli core install arduino:avr MightyCore:avr@2.0.3
+	arduino-cli core update-index
+	arduino-cli core install arduino:avr MightyCore:avr@2.0.5
 	arduino-cli lib install U8glib@1.18.0
 
 build: prepare
