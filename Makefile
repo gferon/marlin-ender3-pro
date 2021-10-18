@@ -3,18 +3,19 @@ export PATH := $(shell pwd):$(PATH)
 
 all: build
 
-#arduino-cli:
-#	curl -sL https://github.com/arduino/arduino-cli/releases/download/0.11.0/arduino-cli_0.11.0_Linux_64bit.tar.gz | tar -xz arduino-cli
-
-#prepare: arduino-cli
-#	arduino-cli core update-index
-#	arduino-cli core install arduino:avr MightyCore:avr@2.1.3
-#	# since marlin 2.0.8 we need a patched U8glib / arduino-cli lib install U8glib@1.18.0
-#	# install the version from https://github.com/MarlinFirmware/U8glib-HAL.git
+platformio:
+	virtualenv .venv
+	( \
+		source .venv/bin/activate; \
+		pip install -q platformio; \
+	)
 
 build:
 	cp config/* Marlin/Marlin/
-	platformio run -d Marlin -e STM32F103RET6_creality
+	( \
+		source .venv/bin/activate; \
+		platformio run -d Marlin -e STM32F103RET6_creality; \
+	)
 
 # flash: build
 # 	scp Marlin/.pio/build/STM32F103RET6_creality/firmware.hex pi@octopi:firmware.hex
