@@ -1,25 +1,19 @@
 .PHONY: flash
 export PATH := $(shell pwd):$(PATH)
 
+username := $(shell id -u -n)
+
 all: build
 
-platformio:
-	virtualenv .venv
-	( \
-		source .venv/bin/activate; \
-		pip install -q platformio; \
-	)
-
 build:
-	cp config/* Marlin/Marlin/
-	( \
-		source .venv/bin/activate; \
-		platformio run -d Marlin -e STM32F103RET6_creality; \
-	)
+	cd Marlin/Marlin/ && ln -sf ../../config/* .
+	PLATFORMIO_BUILD_CACHE_DIR=/tmp/marlin-build-cache platformio run -d Marlin -e STM32F103RE_creality
+	rm -fv /run/media/$(username)/37E7-8DBC/*.bin
+	(cd Marlin/.pio/build/STM32F103RE_creality/ && cp -v $(shell ls -t . | grep bin | head -n1) /run/media/$(username)/37E7-8DBC/)
 
-# flash: build
-# 	scp Marlin/.pio/build/STM32F103RET6_creality/firmware.hex pi@octopi:firmware.hex
-# 	# ssh pi@octopi "avrdude -C /etc/avrdude.conf -v -p atmega1284p -carduino -P /dev/ttyUSB0 -b 115200 -D -Uflash:w:firmware.hex:i"
+diff:
+	meld config/Configuration.h Configurations/config/examples/Creality/Ender-3\ Pro/CrealityV427/Configuration.h
+	meld config/Configuration_adv.h Configurations/config/examples/Creality/Ender-3\ Pro/CrealityV427/Configuration_adv.h
 
 clean:
 	rm -f Marlin/Marlin/{_Bootscreen.h,_Statusscreen.h}
